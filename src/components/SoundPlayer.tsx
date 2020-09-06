@@ -7,12 +7,14 @@ import StopIcon from '@material-ui/icons/Stop';
 import PauseIcon from '@material-ui/icons/Pause';
 import RadioButtonUncheckedIcon from '@material-ui/icons/RadioButtonUnchecked';
 import ClearIcon from '@material-ui/icons/Clear';
+import NotificationsActiveIcon from '@material-ui/icons/NotificationsActive';
 import 'fontsource-roboto'
 import Time from './Time';
 
 const SoundPlayer: React.FC = () => {
   const [correctSound] = React.useState(new Audio("https://raw.githubusercontent.com/shuto410/5BomberTimer/master/audio/correct.mp3"));
   const [wrongSound] = React.useState(new Audio("https://raw.githubusercontent.com/shuto410/5BomberTimer/master/audio/wrong.mp3"));
+  const [successSound] = React.useState(new Audio("https://raw.githubusercontent.com/shuto410/5BomberTimer/master/audio/success.mp3"));
   useEffect(() => {
     document.body.addEventListener('keydown',
       (event) => {
@@ -50,6 +52,7 @@ const SoundPlayer: React.FC = () => {
         <Grid container justify="center">
           <IconButton onClick={() => playCorrectSound()}><RadioButtonUncheckedIcon></RadioButtonUncheckedIcon></IconButton>
           <IconButton onClick={() => playWrongSound()}><ClearIcon></ClearIcon></IconButton>
+          <IconButton onClick={() => successSound.play()}><NotificationsActiveIcon></NotificationsActiveIcon></IconButton>
         </Grid>
       </Box>
     </div>

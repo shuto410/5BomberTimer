@@ -30,10 +30,13 @@ const Timer: React.FC = () => {
   const [actionButton, setActionButton] = useState<ActionButton>({color: 'primary', name: 'start'})
   const [resetButtonIsEnable, setResetButtonIsEnable] = useState(true);
   const [isResetState, setIsResetState] = useState(true);
+  const [startSound] = React.useState(new Audio("https://raw.githubusercontent.com/shuto410/5BomberTimer/master/audio/start.mp3"));
+  const [cannonSound] = React.useState(new Audio("https://raw.githubusercontent.com/shuto410/5BomberTimer/master/audio/cannon.mp3"));
 
   useEffect(() => {
     refRemainingSeconds.current = remainingSeconds;
     if (remainingSeconds === 0) {
+      cannonSound.play();
       window.clearInterval(timerId);
     }
   }, [remainingSeconds]);
@@ -56,6 +59,9 @@ const Timer: React.FC = () => {
 
   const startTimer = () => {
     setTimerId(window.setInterval(updateTimer, 1000));
+    if (remainingSeconds === initialSeconds) {
+      startSound.play();
+    }
   }
 
   const stopTimer = () => {
