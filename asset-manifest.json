@@ -1,0 +1,26 @@
+{
+  "files": {
+    "main.css": "/5BomberTimer/static/css/main.5ecd60fb.chunk.css",
+    "main.js": "/5BomberTimer/static/js/main.a29684d9.chunk.js",
+    "main.js.map": "/5BomberTimer/static/js/main.a29684d9.chunk.js.map",
+    "runtime-main.js": "/5BomberTimer/static/js/runtime-main.691dcd11.js",
+    "runtime-main.js.map": "/5BomberTimer/static/js/runtime-main.691dcd11.js.map",
+    "static/css/2.0bb12cd1.chunk.css": "/5BomberTimer/static/css/2.0bb12cd1.chunk.css",
+    "static/js/2.b41dbdaa.chunk.js": "/5BomberTimer/static/js/2.b41dbdaa.chunk.js",
+    "static/js/2.b41dbdaa.chunk.js.map": "/5BomberTimer/static/js/2.b41dbdaa.chunk.js.map",
+    "index.html": "/5BomberTimer/index.html",
+    "precache-manifest.df031a65fea2fb5b8396a9145c88a296.js": "/5BomberTimer/precache-manifest.df031a65fea2fb5b8396a9145c88a296.js",
+    "service-worker.js": "/5BomberTimer/service-worker.js",
+    "static/css/2.0bb12cd1.chunk.css.map": "/5BomberTimer/static/css/2.0bb12cd1.chunk.css.map",
+    "static/css/main.5ecd60fb.chunk.css.map": "/5BomberTimer/static/css/main.5ecd60fb.chunk.css.map",
+    "static/js/2.b41dbdaa.chunk.js.LICENSE.txt": "/5BomberTimer/static/js/2.b41dbdaa.chunk.js.LICENSE.txt",
+    "static/media/index.css": "/5BomberTimer/static/media/roboto-vietnamese-400-normal.a8be5b46.woff2"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.691dcd11.js",
+    "static/css/2.0bb12cd1.chunk.css",
+    "static/js/2.b41dbdaa.chunk.js",
+    "static/css/main.5ecd60fb.chunk.css",
+    "static/js/main.a29684d9.chunk.js"
+  ]
+}
