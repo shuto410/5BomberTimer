@@ -7,21 +7,19 @@ type TimeProps = {
 }
 const Time: React.FC<TimeProps> = (props) => {
   const secondsToString = (seconds: number): string => {
-    const m: number = seconds / 60;
+    const m: number = Math.floor(seconds / 60);
     const s: number = seconds % 60;
     let mStr: string = m.toString();
     let sStr: string = s.toString();
     if (m < 10) mStr = '0' + mStr;
-    if (s < 10) sStr = sStr + '0';
+    if (s < 10) sStr = '0' + sStr;
     return mStr + ':' + sStr;
   }
 
   return (
-    <Paper elevation={4}>
       <Typography align="center" color="primary" variant="h1">
         { secondsToString(props.seconds) }
       </Typography>
-    </Paper>
   );
 
 }
