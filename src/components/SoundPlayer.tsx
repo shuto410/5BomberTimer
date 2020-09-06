@@ -17,24 +17,39 @@ const SoundPlayer: React.FC = () => {
     document.body.addEventListener('keydown',
       (event) => {
         if (event.key === 'c') {
-          correctSound.play();
+          playCorrectSound();
         }
       }
     );
     document.body.addEventListener('keydown',
       (event) => {
         if (event.key === 'x') {
-          wrongSound.play();
+          playWrongSound();
         }
       }
     );
   }, []);
+
+  const playCorrectSound = () => {
+    correctSound.play();
+    // setTimeout(() => {
+    //   correctSound.pause();
+    // }, 1000)
+  }
+
+  const playWrongSound = () => {
+    wrongSound.play();
+    // setTimeout(() => {
+    //   wrongSound.pause();
+    // }, 1000)
+  }
+
   return (
     <div>
       <Box mt={3}>
         <Grid container justify="center">
-          <IconButton onClick={() => correctSound.play()}><RadioButtonUncheckedIcon></RadioButtonUncheckedIcon></IconButton>
-          <IconButton onClick={() => wrongSound.play()}><ClearIcon></ClearIcon></IconButton>
+          <IconButton onClick={() => playCorrectSound()}><RadioButtonUncheckedIcon></RadioButtonUncheckedIcon></IconButton>
+          <IconButton onClick={() => playWrongSound()}><ClearIcon></ClearIcon></IconButton>
         </Grid>
       </Box>
     </div>
