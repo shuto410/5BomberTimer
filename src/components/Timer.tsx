@@ -107,12 +107,12 @@ const Timer: React.FC = () => {
   }
 
   return (
-    <Grid container spacing={2}>
-      <Grid item xs>
+    <Grid container justify="center" spacing={2}>
+      <Grid item xs md={5}>
         <Paper className={remainingSeconds === 0 ? classes.redBg : classes.whiteBg} color="primary" elevation={4}>
           <Grid container>
           <Grid item xs={11}>
-            <Box ml="8vw"><Time seconds={remainingSeconds} isResetState={isResetState}/ ></Box>
+            <Box ml="5vw"><Time seconds={remainingSeconds} isResetState={isResetState}/ ></Box>
           </Grid>
           <Grid item xs={1}>
             <Grid container>
