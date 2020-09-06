@@ -1,13 +1,26 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Button, Grid, IconButton, Paper, Box } from '@material-ui/core'
+import { Button, Grid, IconButton, Paper, Box, makeStyles } from '@material-ui/core'
 import AddIcon from '@material-ui/icons/Add';
 import RemoveIcon from '@material-ui/icons/Remove';
+import PlayArrowIcon from '@material-ui/icons/PlayArrow';
+import StopIcon from '@material-ui/icons/Stop';
+import PauseIcon from '@material-ui/icons/Pause';
 import 'fontsource-roboto'
 import Time from './Time';
 
+const useStyles = makeStyles({
+  redBg: {
+    background: 'red',
+  },
+  whiteBg: {
+  },
+})
+
 
 const Timer: React.FC = () => {
-  const [remainingSeconds, setRemainingSeconds] = useState(0);
+  const classes = useStyles();
+  const [initialSeconds, setInitialSeconds] = useState(90)
+  const [remainingSeconds, setRemainingSeconds] = useState(initialSeconds);
   const refRemainingSeconds = useRef(remainingSeconds);
   const [timerId, setTimerId] = useState(0);
   const [running, setRunning] = useState(false);
@@ -16,6 +29,7 @@ const Timer: React.FC = () => {
   type ActionButton = typeof stopButton | typeof startButton;
   const [actionButton, setActionButton] = useState<ActionButton>({color: 'primary', name: 'start'})
   const [resetButtonIsEnable, setResetButtonIsEnable] = useState(true);
+  const [isResetState, setIsResetState] = useState(true);
 
   useEffect(() => {
     refRemainingSeconds.current = remainingSeconds;
@@ -36,6 +50,7 @@ const Timer: React.FC = () => {
       setRunning(true);
       setActionButton(stopButton);
       setResetButtonIsEnable(false);
+      setIsResetState(false);
     }
   }
 
@@ -48,46 +63,77 @@ const Timer: React.FC = () => {
   }
 
   const updateTimer = () => {
-    setRemainingSeconds(refRemainingSeconds.current - 1);
+    if (refRemainingSeconds.current > 0) {
+      setRemainingSeconds(refRemainingSeconds.current - 1);
+    }
   }
 
   const resetTimer = () => {
-    setRemainingSeconds(3);
+    setRemainingSeconds(initialSeconds);
     window.clearInterval(timerId);
+    setIsResetState(true);
+  }
+
+  const increaseTime = () => {
+    if (isResetState) {
+      if (initialSeconds > 3570) {
+        setInitialSeconds(3599);
+      }
+      else {
+        setInitialSeconds(initialSeconds + 30);
+      }
+    }
+    if (remainingSeconds > 3570) {
+      setRemainingSeconds(3599);
+      return;
+    }
+    setRemainingSeconds(remainingSeconds + 30);
+  }
+
+  const decreaseTime = () => {
+    if (isResetState) {
+      if (initialSeconds < 30) {
+        setInitialSeconds(0);
+      }
+      else {
+        setInitialSeconds(initialSeconds - 30)
+      }
+    }
+    if (remainingSeconds < 30) {
+      setRemainingSeconds(0);
+      return;
+    }
+    setRemainingSeconds(remainingSeconds - 30);
   }
 
   return (
     <Grid container spacing={2}>
       <Grid item xs>
-        <Paper elevation={4}>
+        <Paper className={remainingSeconds === 0 ? classes.redBg : classes.whiteBg} color="primary" elevation={4}>
           <Grid container>
-            <Grid item xs={11}>
-              <Box ml="8vw">
-                <Time seconds={remainingSeconds}/ >
-              </Box>
+          <Grid item xs={11}>
+            <Box ml="8vw"><Time seconds={remainingSeconds} isResetState={isResetState}/ ></Box>
+          </Grid>
+          <Grid item xs={1}>
+            <Grid container>
+            <Grid item xs={12}>
+              <Box mt={1}><IconButton color={isResetState ? "secondary":"primary"} edge='start' onClick={() => {increaseTime()}}><AddIcon></AddIcon></IconButton></Box>
             </Grid>
-            <Grid item xs={1}>
-              <Grid container>
-                <Grid item xs={12}>
-                  <Box mt={1}>
-                    <IconButton color="primary" edge='start'><AddIcon></AddIcon></IconButton>
-                  </Box>
-                </Grid>
-                <Grid item xs={12}>
-                  <IconButton color="primary" edge='start'><RemoveIcon></RemoveIcon></IconButton>
-                </Grid>
-              </Grid>
+            <Grid item xs={12}>
+              <IconButton color={isResetState ? "secondary":"primary"} edge='start' onClick={() => {decreaseTime()}}><RemoveIcon></RemoveIcon></IconButton>
             </Grid>
+            </Grid>
+          </Grid>
           </Grid>
         </Paper>
       </Grid>
       <Grid item xs={12}>
         <Grid container justify="center" spacing={2}>
           <Box mr="1vw" mt="3vh">
-            <Button size="large" variant="contained" color={actionButton.color} onClick={() => {onActionButton()}}>{actionButton.name}</Button>
+            <Button size="large" variant="contained" color={actionButton.color} startIcon={running ? <PauseIcon/>:<PlayArrowIcon/>} onClick={() => {onActionButton()}}>{actionButton.name}</Button>
           </Box>
           <Box ml="1vw" mt="3vh">
-            <Button size="large" variant="contained" color="secondary" disabled={resetButtonIsEnable ? false : true} onClick={() => {resetTimer()}}>Reset</Button>
+            <Button size="large" variant="contained" color="secondary" startIcon={<StopIcon/>} disabled={resetButtonIsEnable ? false : true} onClick={() => {resetTimer()}}>Reset</Button>
           </Box>
         </Grid>
       </Grid>

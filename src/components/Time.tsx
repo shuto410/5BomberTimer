@@ -4,6 +4,7 @@ import 'fontsource-roboto'
 
 type TimeProps = {
   seconds: number;    
+  isResetState: boolean;
 }
 const Time: React.FC<TimeProps> = (props) => {
   const secondsToString = (seconds: number): string => {
@@ -17,7 +18,7 @@ const Time: React.FC<TimeProps> = (props) => {
   }
 
   return (
-      <Typography align="center" color="primary" variant="h1">
+      <Typography align="center" color={props.isResetState ? "secondary":"primary"} variant="h1">
         { secondsToString(props.seconds) }
       </Typography>
   );
