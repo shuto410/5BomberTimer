@@ -3,7 +3,7 @@ import { Button, TextField, TextFieldProps } from '@material-ui/core'
 import 'fontsource-roboto'
 
 const Chat: React.FC = () => {
-  const host = 'ws://fivebomber.herokuapp.com:58357';
+  const host = 'wss://fivebomber.herokuapp.com:58357';
   // const host = 'ws://localhost:4000';
   const [ws] = useState(new WebSocket(host));
   const text = useRef<TextFieldProps>(null);
