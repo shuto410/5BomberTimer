@@ -1,15 +1,9 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { Button, Grid, IconButton, Paper, Box, makeStyles } from '@material-ui/core'
-import AddIcon from '@material-ui/icons/Add';
-import RemoveIcon from '@material-ui/icons/Remove';
-import PlayArrowIcon from '@material-ui/icons/PlayArrow';
-import StopIcon from '@material-ui/icons/Stop';
-import PauseIcon from '@material-ui/icons/Pause';
+import React, { useEffect } from 'react';
+import { Grid, IconButton, Box } from '@material-ui/core'
 import RadioButtonUncheckedIcon from '@material-ui/icons/RadioButtonUnchecked';
 import ClearIcon from '@material-ui/icons/Clear';
 import NotificationsActiveIcon from '@material-ui/icons/NotificationsActive';
 import 'fontsource-roboto'
-import Time from './Time';
 
 const SoundPlayer: React.FC = () => {
   const [correctSound] = React.useState(new Audio("https://raw.githubusercontent.com/shuto410/5BomberTimer/master/audio/correct.mp3"));
