@@ -38,7 +38,7 @@ const Chat: React.FC = () => {
   const [ws, setWs] = useState(new WebSocket(host));
   // const input = useRef<TextFieldProps | null>(null);
   const [input, setInput] = useState("");
-  const [timeline, setTimeline] = useState<{id: number, time: string, msg: string}[]>([{id: 0, time: "test1", msg: "hoge"}, {id: 1, time: "test2", msg: "hoge"}, {id: 2, time: "test3", msg: "hoge"}]);
+  const [timeline, setTimeline] = useState<{id: number, time: string, msg: string}[]>([{id: 0, time: "", msg: "Enjoy chat!"}]);
   const [onPostForm, setOnPostForm] = useState(false);
   const refOnPostForm = useRef(onPostForm);
   // const [text, setText] = useState("");
@@ -101,7 +101,7 @@ const Chat: React.FC = () => {
           ></input>
           <List>
             {
-              timeline.reverse().map(post => (
+              timeline.map(post => (
                 <Box mt={-1} mb={-2} key={post.id}>
                   <ListItem >
                     <ListItemText primary={post.msg} secondary={post.time} />
@@ -111,7 +111,6 @@ const Chat: React.FC = () => {
             }
           </List>
         </Card>
-
         </Grid>
         </Grid>
     </div>
