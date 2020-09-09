@@ -48,7 +48,7 @@ const Timer: React.FC = () => {
       setActionButton(startButton);
       setResetButtonIsEnable(true);
     }
-    else { 
+    else {
       startTimer();
       setRunning(true);
       setActionButton(stopButton);
