@@ -37,21 +37,21 @@ const SoundPlayer: React.FC = () => {
     document.body.addEventListener('keydown',
       (event) => {
         if (event.key === ',') {
-          playCorrectSound();
+          ws.send("Correct!!");
         }
       }
     );
     document.body.addEventListener('keydown',
       (event) => {
         if (event.key === '.') {
-          playWrongSound();
+          ws.send("Wrong!!");
         }
       }
     );
     document.body.addEventListener('keydown',
       (event) => {
         if (event.key === '/') {
-          successSound.play();
+          ws.send("Congratulations!!");
         }
       }
     );
@@ -85,9 +85,9 @@ const SoundPlayer: React.FC = () => {
     <div>
       <Box mt={3}>
         <Grid container justify="center">
-          <IconButton onClick={() => playCorrectSound()}><RadioButtonUncheckedIcon></RadioButtonUncheckedIcon></IconButton>
-          <IconButton onClick={() => playWrongSound()}><ClearIcon></ClearIcon></IconButton>
-          <IconButton onClick={() => playSuccessSound()}><NotificationsActiveIcon></NotificationsActiveIcon></IconButton>
+          <IconButton onClick={() => ws.send("Correct!!")}><RadioButtonUncheckedIcon></RadioButtonUncheckedIcon></IconButton>
+          <IconButton onClick={() => ws.send("Wrong!!")}><ClearIcon></ClearIcon></IconButton>
+          <IconButton onClick={() => ws.send("Congratulations!!")}><NotificationsActiveIcon></NotificationsActiveIcon></IconButton>
         </Grid>
       </Box>
     </div>
