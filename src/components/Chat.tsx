@@ -71,8 +71,9 @@ const Chat: React.FC = () => {
     // if (event.key === 'Enter' && !postFormIsEmpty) {
     //   ws.send(input.current?.value as string);
     // }
+    console.log("event.shift" + event.shiftKey);
     const postFormIsEmpty: boolean = input.length === 0;
-    if (event.key === 'Enter' && !postFormIsEmpty) {
+    if (event.key === 'Enter' && event.shiftKey && !postFormIsEmpty) {
       ws.send(input);
       setInput("");
     }

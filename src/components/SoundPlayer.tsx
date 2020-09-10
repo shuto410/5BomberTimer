@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Grid, IconButton, Box } from '@material-ui/core'
 import RadioButtonUncheckedIcon from '@material-ui/icons/RadioButtonUnchecked';
 import ClearIcon from '@material-ui/icons/Clear';
@@ -9,18 +9,49 @@ const SoundPlayer: React.FC = () => {
   const [correctSound] = React.useState(new Audio("https://raw.githubusercontent.com/shuto410/5BomberTimer/master/audio/correct.mp3"));
   const [wrongSound] = React.useState(new Audio("https://raw.githubusercontent.com/shuto410/5BomberTimer/master/audio/wrong.mp3"));
   const [successSound] = React.useState(new Audio("https://raw.githubusercontent.com/shuto410/5BomberTimer/master/audio/success.mp3"));
+  const host = 'wss://fivebomber.herokuapp.com';
+  const [ws, setWs] = useState(new WebSocket(host));
+  useEffect(() => {
+    ws.onopen = () => {
+      console.log("open");
+    }
+    ws.onmessage = (response) => {
+      const msg = response.data;
+      if(msg === 'Correct!!') {
+        correctSound.play();
+      }
+      if(msg === 'Wrong!!') {
+        wrongSound.play();
+      }
+      if(msg === 'Congratulations!!') {
+        successSound.play();
+      }
+    }
+    ws.onclose = () => {
+      console.log("closed");
+      setWs(new WebSocket(host));
+    }
+  })
+
   useEffect(() => {
     document.body.addEventListener('keydown',
       (event) => {
-        if (event.key === 'c') {
+        if (event.key === ',') {
           playCorrectSound();
         }
       }
     );
     document.body.addEventListener('keydown',
       (event) => {
-        if (event.key === 'x') {
+        if (event.key === '.') {
           playWrongSound();
+        }
+      }
+    );
+    document.body.addEventListener('keydown',
+      (event) => {
+        if (event.key === '/') {
+          successSound.play();
         }
       }
     );
@@ -28,6 +59,7 @@ const SoundPlayer: React.FC = () => {
 
   const playCorrectSound = () => {
     correctSound.play();
+    ws.send("Correct!!");
     // setTimeout(() => {
     //   correctSound.pause();
     // }, 1000)
@@ -35,6 +67,15 @@ const SoundPlayer: React.FC = () => {
 
   const playWrongSound = () => {
     wrongSound.play();
+    ws.send("Wrong!!");
+    // setTimeout(() => {
+    //   wrongSound.pause();
+    // }, 1000)
+  }
+
+  const playSuccessSound = () => {
+    successSound.play();
+    ws.send("Congratulations!!");
     // setTimeout(() => {
     //   wrongSound.pause();
     // }, 1000)
@@ -46,7 +87,7 @@ const SoundPlayer: React.FC = () => {
         <Grid container justify="center">
           <IconButton onClick={() => playCorrectSound()}><RadioButtonUncheckedIcon></RadioButtonUncheckedIcon></IconButton>
           <IconButton onClick={() => playWrongSound()}><ClearIcon></ClearIcon></IconButton>
-          <IconButton onClick={() => successSound.play()}><NotificationsActiveIcon></NotificationsActiveIcon></IconButton>
+          <IconButton onClick={() => playSuccessSound()}><NotificationsActiveIcon></NotificationsActiveIcon></IconButton>
         </Grid>
       </Box>
     </div>
