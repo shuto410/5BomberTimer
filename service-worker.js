@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "/5BomberTimer/precache-manifest.be6afe9c47b10ded6786110fed46ad14.js"
+  "/5BomberTimer/precache-manifest.661765daeb7b1117be7c5e2b41c489c6.js"
 );
 
 self.addEventListener('message', (event) => {
