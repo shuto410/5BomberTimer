@@ -1,6 +1,8 @@
-import React, { useState, useRef, useEffect, KeyboardEvent } from 'react';
+import React, { useState, useRef, useEffect, KeyboardEvent, useContext } from 'react';
 import { Button, TextField, TextFieldProps, List, ListItem, ListItemText, Box, Divider, Paper, Card, makeStyles, Grid } from '@material-ui/core'
 import 'fontsource-roboto'
+import { connection } from './WebSocketConnection';
+import { UserContext } from '../App';
 
 const useStyles = makeStyles({
   chatform: {
@@ -10,71 +12,70 @@ const useStyles = makeStyles({
     marginTop: "10px",
     padding: "10px 10px 10px 5px",
     display: "block",
-    width: "85%",
     height: "10px",
+    width: "85%",
     border: "none",
     borderBottom: "1px solid #757575 ",
     backgroundColor: "#f4f4f4",
     BorderRadius: "30px"
   },
-  // chatformLabel: {
-  //   color:"#999",
-  //   fontSize:"18px",
-  //   fontWeight:"normal",
-  //   position:"absolute",
-  //   pointerEvents:"none",
-  //   left:"5px",
-  //   top:"10px",
-  //   transition:"0.2s ease all",
-  //   MozTransition: "0.2s ease all",
-  //   WebkitTransition: "0.2s ease all",
-  // }
 });
 
 const Chat: React.FC = () => {
   const classes = useStyles();
-  const host = 'wss://fivebomber.herokuapp.com';
-  // const host = 'ws://localhost:4000';
-  const [ws, setWs] = useState(new WebSocket(host));
   // const input = useRef<TextFieldProps | null>(null);
   const [input, setInput] = useState("");
-  const [timeline, setTimeline] = useState<{id: number, time: string, msg: string}[]>([{id: 0, time: "", msg: "Enjoy chat!"}]);
-  const [onPostForm, setOnPostForm] = useState(false);
-  const refOnPostForm = useRef(onPostForm);
-  // const [text, setText] = useState("");
+  const [timeline, setTimeline] = useState<{id: number, time: string, userId: string, msg: string}[]>([]);
+  const refTimeline = useRef(timeline);
+  const chatMsgPrefix = 'chat:';
+  const userId = useContext(UserContext);
 
   useEffect(() => {
-    ws.onopen = () => {
-      console.log("open");
-    }
-    ws.onmessage = (response) => {
-      const msg = response.data;
-      console.log("received");
-      console.log(msg);
+    connection.addOnMessage((response) => {
+      const data: string = response.data;
+      let msg: string = '';
+      // sound-{type}:{userid}
+      if (data.startsWith('sound-correct')) {
+        msg = 'Correct!!'
+      }
+      if (data.startsWith('sound-wrong')) {
+        msg = 'Wrong!!'
+      }
+      if (data.startsWith('sound-success')) {
+        msg = 'Congratulations!!'
+      }
+      // chat:{userid}:{msg}
+      if (data.startsWith(chatMsgPrefix)) {
+        msg = data.split(':')[2];
+      }
+      const userId = data.split(':')[1];
       const date = new Date();
-      console.log(timeline)
-      const newId: number = timeline[0].id + 1;
-      setTimeline([{id: newId, time: date.toLocaleTimeString(), msg: msg}, ...timeline])
-    }
-    ws.onclose = () => {
-      console.log("closed");
-      setWs(new WebSocket(host));
-    }
-  })
+      const newId: number = (refTimeline.current.length === 0) ? 0 : refTimeline.current[0].id + 1;
+      setTimeline([
+        {
+          id: newId,
+          time: date.toLocaleString(),
+          userId: userId,
+          msg: msg
+        },
+        ...refTimeline.current,
+      ])
+    })
+  }, [])
+
+  useEffect(() => {
+    refTimeline.current = timeline;
+  }, [timeline])
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setInput(event.target.value);
   }
 
   const submit = (event: KeyboardEvent) => {
-    // const postFormIsEmpty: boolean = (input.current?.value as string).length === 0;
-    // if (event.key === 'Enter' && !postFormIsEmpty) {
-    //   ws.send(input.current?.value as string);
-    // }
-    console.log("event.shift" + event.shiftKey);
     const postFormIsEmpty: boolean = input.length === 0;
     if (event.key === 'Enter' && event.shiftKey && !postFormIsEmpty) {
-      ws.send(input);
+      console.log(userId);
+      connection.send(chatMsgPrefix + userId + ':' +  input);
       setInput("");
     }
   }
@@ -84,14 +85,6 @@ const Chat: React.FC = () => {
       <Grid container justify="flex-end">
         <Grid item xs={4}>
         <Card variant="outlined">
-          {/* <TextField
-            InputLabelProps={{
-              shrink: true,
-            }}
-            variant="outlined"
-            inputRef={input}
-            onKeyDown={(e) => {submit(e)}}
-          /> */}
           <input
             type="text"
             name="Post"
@@ -105,11 +98,16 @@ const Chat: React.FC = () => {
               timeline.map(post => (
                 <Box mt={-1} mb={-2} key={post.id}>
                   <ListItem >
-                    <ListItemText primary={post.msg} secondary={post.time} />
+                    <ListItemText primary={post.msg} secondary={post.time + " ID:" + post.userId.slice(0,6)} />
                   </ListItem>
                 </Box>
               ))
             }
+            <Box mt={-1} mb={-2}>
+              <ListItem >
+                <ListItemText primary="Press Shift+Enter" />
+              </ListItem>
+            </Box>
           </List>
         </Card>
         </Grid>

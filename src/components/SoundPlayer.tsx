@@ -1,93 +1,84 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext, useRef } from 'react';
 import { Grid, IconButton, Box } from '@material-ui/core'
 import RadioButtonUncheckedIcon from '@material-ui/icons/RadioButtonUnchecked';
 import ClearIcon from '@material-ui/icons/Clear';
 import NotificationsActiveIcon from '@material-ui/icons/NotificationsActive';
 import 'fontsource-roboto'
+import { connection } from './WebSocketConnection';
+import { UserContext } from '../App';
 
 const SoundPlayer: React.FC = () => {
   const [correctSound] = React.useState(new Audio("https://raw.githubusercontent.com/shuto410/5BomberTimer/master/audio/correct.mp3"));
   const [wrongSound] = React.useState(new Audio("https://raw.githubusercontent.com/shuto410/5BomberTimer/master/audio/wrong.mp3"));
   const [successSound] = React.useState(new Audio("https://raw.githubusercontent.com/shuto410/5BomberTimer/master/audio/success.mp3"));
-  const host = 'wss://fivebomber.herokuapp.com';
-  const [ws, setWs] = useState(new WebSocket(host));
+  const soundDict: Array<{key: string, sound: HTMLAudioElement}> = [
+    { key: 'correct', sound: correctSound },
+    { key: 'wrong',   sound: wrongSound },
+    { key: 'success', sound: successSound },
+  ];
+  const msgPrefix = 'sound-';
+  const userId = useContext(UserContext);
+  const refUserId = useRef(userId)
+
   useEffect(() => {
-    ws.onopen = () => {
-      console.log("open");
-    }
-    ws.onmessage = (response) => {
-      const msg = response.data;
-      if(msg === 'Correct!!') {
-        correctSound.play();
-      }
-      if(msg === 'Wrong!!') {
-        wrongSound.play();
-      }
-      if(msg === 'Congratulations!!') {
-        successSound.play();
-      }
-    }
-    ws.onclose = () => {
-      console.log("closed");
-      setWs(new WebSocket(host));
-    }
+    refUserId.current = userId;
+  }, [userId])
+
+  useEffect(() => {
+    connection.addOnMessage((response) => {
+      const msg: string = response.data;
+      soundDict.forEach(item => {
+        if (msg.startsWith(msgPrefix + item.key)) {
+          if (!msg.endsWith(refUserId.current)) {
+            item.sound.play();
+          }
+        }
+      })
+    });
   })
+
+  const hoge = (response: MessageEvent) => {
+
+  }
 
   useEffect(() => {
     document.body.addEventListener('keydown',
       (event) => {
         if (event.key === ',') {
-          ws.send("Correct!!");
+          correctSound.play();
+          sendCorrectSound();
         }
-      }
-    );
-    document.body.addEventListener('keydown',
-      (event) => {
         if (event.key === '.') {
-          ws.send("Wrong!!");
+          wrongSound.play();
+          sendWrongSound();
         }
-      }
-    );
-    document.body.addEventListener('keydown',
-      (event) => {
         if (event.key === '/') {
-          ws.send("Congratulations!!");
+          successSound.play();
+          sendSuccessSound();
         }
       }
     );
   }, []);
 
-  const playCorrectSound = () => {
-    correctSound.play();
-    ws.send("Correct!!");
-    // setTimeout(() => {
-    //   correctSound.pause();
-    // }, 1000)
+  const sendCorrectSound = () => {
+    connection.send(msgPrefix + 'correct:' + userId);
   }
 
-  const playWrongSound = () => {
-    wrongSound.play();
-    ws.send("Wrong!!");
-    // setTimeout(() => {
-    //   wrongSound.pause();
-    // }, 1000)
+  const sendWrongSound = () => {
+    connection.send(msgPrefix + 'wrong:' + userId);
   }
 
-  const playSuccessSound = () => {
-    successSound.play();
-    ws.send("Congratulations!!");
-    // setTimeout(() => {
-    //   wrongSound.pause();
-    // }, 1000)
+  const sendSuccessSound = () => {
+    connection.send(msgPrefix + 'success:' + userId);
   }
 
   return (
     <div>
       <Box mt={3}>
         <Grid container justify="center">
-          <IconButton onClick={() => ws.send("Correct!!")}><RadioButtonUncheckedIcon></RadioButtonUncheckedIcon></IconButton>
-          <IconButton onClick={() => ws.send("Wrong!!")}><ClearIcon></ClearIcon></IconButton>
-          <IconButton onClick={() => ws.send("Congratulations!!")}><NotificationsActiveIcon></NotificationsActiveIcon></IconButton>
+          <IconButton onClick={() => {correctSound.play();sendCorrectSound()}}><RadioButtonUncheckedIcon></RadioButtonUncheckedIcon></IconButton>
+          <IconButton onClick={() => {wrongSound.play();sendWrongSound()}}><ClearIcon></ClearIcon></IconButton>
+          <IconButton onClick={() => {successSound.play();sendSuccessSound()}}><NotificationsActiveIcon></NotificationsActiveIcon></IconButton>
         </Grid>
       </Box>
     </div>
