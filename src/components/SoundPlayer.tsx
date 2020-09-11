@@ -61,15 +61,15 @@ const SoundPlayer: React.FC = () => {
   }, []);
 
   const sendCorrectSound = () => {
-    connection.send(msgPrefix + 'correct:' + userId);
+    connection.send(msgPrefix + 'correct:' + refUserId.current);
   }
 
   const sendWrongSound = () => {
-    connection.send(msgPrefix + 'wrong:' + userId);
+    connection.send(msgPrefix + 'wrong:' + refUserId.current);
   }
 
   const sendSuccessSound = () => {
-    connection.send(msgPrefix + 'success:' + userId);
+    connection.send(msgPrefix + 'success:' + refUserId.current);
   }
 
   return (
