@@ -1,6 +1,6 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "4eb446fa6b63c35ffaf216b14e87d2ff",
+    "revision": "6796a3d01eeb41b5b7b03a42537ca82a",
     "url": "/5BomberTimer/index.html"
   },
   {
@@ -8,7 +8,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/5BomberTimer/static/css/2.0bb12cd1.chunk.css"
   },
   {
-    "revision": "e34b391ff399e0368c1c",
+    "revision": "de5c0075f005ceff5d1c",
     "url": "/5BomberTimer/static/css/main.5ecd60fb.chunk.css"
   },
   {
@@ -20,8 +20,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/5BomberTimer/static/js/2.2a7e9a3a.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "e34b391ff399e0368c1c",
-    "url": "/5BomberTimer/static/js/main.9b43efdb.chunk.js"
+    "revision": "de5c0075f005ceff5d1c",
+    "url": "/5BomberTimer/static/js/main.c79afd51.chunk.js"
   },
   {
     "revision": "684c7e5f29a7da9ce4c2",
