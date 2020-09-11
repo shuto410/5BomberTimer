@@ -83,7 +83,7 @@ const Chat: React.FC = () => {
   return (
     <div>
       <Grid container justify="flex-end">
-        <Grid item xs={4}>
+        <Grid item xs={8} sm={5} md={3}>
         <Card variant="outlined">
           <input
             type="text"
