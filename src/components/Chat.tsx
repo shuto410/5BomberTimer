@@ -44,6 +44,24 @@ const Chat: React.FC = () => {
       if (data.startsWith('sound-success')) {
         msg = 'Congratulations!!'
       }
+      if (data.startsWith('timer-start')) {
+        msg = 'Timer Start'
+      }
+      if (data.startsWith('timer-stop')) {
+        msg = 'Timer Stop'
+      }
+      if (data.startsWith('timer-reset')) {
+        msg = 'Timer Reset'
+      }
+      if (data.startsWith('timer-increase')) {
+        msg = 'Timer Increase'
+      }
+      if (data.startsWith('timer-decrease')) {
+        msg = 'Timer Decrease'
+      }
+      if (data.startsWith('timer-sync')) {
+        return;
+      }
       // chat:{userid}:{msg}
       if (data.startsWith(chatMsgPrefix)) {
         msg = data.split(':')[2];
