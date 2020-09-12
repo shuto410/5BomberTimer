@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect, KeyboardEvent, useContext } from 'r
 import { Button, TextField, TextFieldProps, List, ListItem, ListItemText, Box, Divider, Paper, Card, makeStyles, Grid } from '@material-ui/core'
 import 'fontsource-roboto'
 import { connection } from './WebSocketConnection';
-import { UserContext } from '../App';
+import { TimerContext } from '../App';
 
 const useStyles = makeStyles({
   chatform: {
@@ -28,7 +28,7 @@ const Chat: React.FC = () => {
   const [timeline, setTimeline] = useState<{id: number, time: string, userId: string, msg: string}[]>([]);
   const refTimeline = useRef(timeline);
   const chatMsgPrefix = 'chat:';
-  const userId = useContext(UserContext);
+  const userId = useContext(TimerContext).userId;
 
   useEffect(() => {
     connection.addOnMessage((response) => {

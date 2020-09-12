@@ -8,7 +8,7 @@ import PauseIcon from '@material-ui/icons/Pause';
 import 'fontsource-roboto'
 import Time from './Time';
 import { connection } from './WebSocketConnection';
-import { UserContext } from '../App';
+import { TimerContext } from '../App';
 
 const useStyles = makeStyles({
   redBg: {
@@ -36,8 +36,9 @@ const Timer: React.FC = () => {
   const [isResetState, setIsResetState] = useState(true);
   const [startSound] = React.useState(new Audio("https://raw.githubusercontent.com/shuto410/5BomberTimer/master/audio/start.mp3"));
   const [cannonSound] = React.useState(new Audio("https://raw.githubusercontent.com/shuto410/5BomberTimer/master/audio/cannon.mp3"));
-  const userId = useContext(UserContext);
+  const userId = useContext(TimerContext).userId;
   const refUserId = useRef(userId)
+  const volume = useContext(TimerContext).volume;
   const timerMsgPrefix = 'timer-';
 
   useEffect(() => {
@@ -51,6 +52,11 @@ const Timer: React.FC = () => {
   useEffect(() => {
     refUserId.current = userId;
   }, [userId])
+
+  useEffect(() => {
+    startSound.volume = volume * 0.01;
+    cannonSound.volume = volume * 0.01;
+  }, [volume])
 
   useEffect(() => {
     refInitialSeconds.current = initialSeconds;

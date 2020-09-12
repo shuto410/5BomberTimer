@@ -1,11 +1,11 @@
 import React, { useEffect, useState, useContext, useRef } from 'react';
-import { Grid, IconButton, Box } from '@material-ui/core'
+import { Grid, IconButton, Box, Slider } from '@material-ui/core'
 import RadioButtonUncheckedIcon from '@material-ui/icons/RadioButtonUnchecked';
 import ClearIcon from '@material-ui/icons/Clear';
 import NotificationsActiveIcon from '@material-ui/icons/NotificationsActive';
 import 'fontsource-roboto'
 import { connection } from './WebSocketConnection';
-import { UserContext } from '../App';
+import { TimerContext } from '../App';
 
 const SoundPlayer: React.FC = () => {
   const [correctSound] = React.useState(new Audio("https://raw.githubusercontent.com/shuto410/5BomberTimer/master/audio/correct.mp3"));
@@ -17,12 +17,19 @@ const SoundPlayer: React.FC = () => {
     { key: 'success', sound: successSound },
   ];
   const msgPrefix = 'sound-';
-  const userId = useContext(UserContext);
+  const userId = useContext(TimerContext).userId;
   const refUserId = useRef(userId)
+  const volume = useContext(TimerContext).volume;
 
   useEffect(() => {
     refUserId.current = userId;
   }, [userId])
+
+  useEffect(() => {
+    correctSound.volume = volume * 0.01;
+    wrongSound.volume = volume * 0.01;
+    successSound.volume = volume * 0.01;
+  }, [volume])
 
   useEffect(() => {
     connection.addOnMessage((response) => {
@@ -36,10 +43,6 @@ const SoundPlayer: React.FC = () => {
       })
     });
   })
-
-  const hoge = (response: MessageEvent) => {
-
-  }
 
   useEffect(() => {
     document.body.addEventListener('keydown',
